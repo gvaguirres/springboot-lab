@@ -1,15 +1,24 @@
 package org.example.springbootlab.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class MovieDTO {
 
     @NotBlank(message = "Title is mandatory")
+    @NotNull
     private String title;
 
+    @Size(min = 1, max = 200)
     private String description;
+
     private String releaseYear;
+
+    @NotBlank(message = "Director is mandatory")
+    @Size(min = 1, max = 50)
     private String director;
+
     private int durationMinutes;
 
     public String getTitle() {
