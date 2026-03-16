@@ -67,13 +67,13 @@ public class MovieController {
     public String showCreateForm(Model model){
         log.info("Showing form to create a new movie");
         model.addAttribute("movieForm", new MovieForm(
-                "", "", "", "", 0));
+                "", "", "", 0, ""));
         return "form";
     }
 
     @GetMapping("/form")
     public String showForm(Model model) {
-        model.addAttribute("movieForm", new MovieForm("", "", "", "", 0));
+        model.addAttribute("movieForm", new MovieForm("", "", "", 0, ""));
         return "form";
     }
 
@@ -97,7 +97,7 @@ public class MovieController {
         movieService.createMovie(movieForm.toDTO());
         redirectAttributes.addFlashAttribute("message", "Movie created successfully" );
 
-        return "redirect:/movies";
+        return "redirect:/movies/list";
     }
 
     //Show formulary for update a movie
@@ -108,6 +108,8 @@ public class MovieController {
         var movie = movieService.getMovieById(id);
         model.addAttribute("movie", movie);
         model.addAttribute("id", id);
+        model.addAttribute("movieForm", new MovieForm(
+                movie.getTitle(), movie.getDirector(), movie.getYear(), movie.getDurationMinutes(), movie.getDescription()));
 
         return "movie-edit-form";
     }
@@ -130,7 +132,7 @@ public class MovieController {
         movieService.updateMovie(id, movieForm.toUpdateDTO());
         redirectAttributes.addFlashAttribute("message", "Movie updated successfully" );
 
-        return "redirect:/movies";
+        return "redirect:/movies/list";
     }
 
     //Delete a movie
@@ -144,6 +146,6 @@ public class MovieController {
         movieService.deleteMovie(id);
         redirectAttributes.addFlashAttribute("message", "Movie deleted successfully" );
 
-        return "redirect:/movies";
+        return "redirect:/movies/list";
     }
 }
