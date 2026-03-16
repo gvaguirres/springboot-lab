@@ -9,7 +9,7 @@ public record CreateMovieDTO(
 
         @Title
         String title,
-        String description,
-        String year,
         String director,
-        int durationMinutes) {}
+        String year,
+        int durationMinutes,
+        String description) {}

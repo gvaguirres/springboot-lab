@@ -7,27 +7,26 @@ public record MovieForm(
 
         @Title
         String title,
-
         String director,
-        String description,
         String year,
-        int durationMinutes) {
+        int durationMinutes,
+        String description) {
 
     public CreateMovieDTO toDTO() {
         return new CreateMovieDTO(
                 this.title,
                 this.director,
-                this.description,
                 this.year,
-                this.durationMinutes);
+                this.durationMinutes,
+                this.description);
     }
 
     public UpdateMovieDTO toUpdateDTO() {
         return new UpdateMovieDTO(
                 this.title,
                 this.director,
-                this.description,
                 this.year,
-                this.durationMinutes);
+                this.durationMinutes,
+                this.description);
     }
 }
