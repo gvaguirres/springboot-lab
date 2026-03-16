@@ -17,7 +17,7 @@ public class Movie {
 
     private String title;
     private String description;
-    private String releaseYear;
+    private String year;
     private String director;
     private int durationMinutes;
 
@@ -47,12 +47,12 @@ public class Movie {
         this.description = description;
     }
 
-    public String getReleaseYear() {
-        return releaseYear;
+    public String getYear() {
+        return year;
     }
 
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getDirector() {
