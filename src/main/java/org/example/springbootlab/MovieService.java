@@ -8,8 +8,6 @@ import org.example.springbootlab.exception.ResourceNotFoundException;
 import org.example.springbootlab.mapper.MovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +19,8 @@ import java.util.Optional;
 public class MovieService {
 
     private static final Logger log = LoggerFactory.getLogger(MovieService.class);
-    private MovieRepository movieRepository;
-    private MovieMapper movieMapper;
+    private final MovieRepository movieRepository;
+    private final MovieMapper movieMapper;
 
     public MovieService(MovieRepository movieRepository, MovieMapper movieMapper) {
         log.info("MovieService constructor");
