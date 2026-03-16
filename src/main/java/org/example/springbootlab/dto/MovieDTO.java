@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 
 public class MovieDTO {
 
+    Long id;
+
     @NotBlank(message = "Title is mandatory")
     @NotNull
     private String title;
@@ -13,13 +15,21 @@ public class MovieDTO {
     @Size(min = 1, max = 200)
     private String description;
 
-    private String releaseYear;
+    private String year;
 
     @NotBlank(message = "Director is mandatory")
     @Size(min = 1, max = 50)
     private String director;
 
     private int durationMinutes;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -37,12 +47,12 @@ public class MovieDTO {
         this.description = description;
     }
 
-    public String getReleaseYear() {
-        return releaseYear;
+    public String getYear() {
+        return year;
     }
 
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getDirector() {
