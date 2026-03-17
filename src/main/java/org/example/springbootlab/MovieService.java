@@ -4,6 +4,7 @@ import org.example.springbootlab.dto.CreateMovieDTO;
 import org.example.springbootlab.dto.MovieDTO;
 import org.example.springbootlab.dto.UpdateMovieDTO;
 import org.example.springbootlab.entity.Movie;
+import org.example.springbootlab.exception.MovieAlreadyExistsException;
 import org.example.springbootlab.exception.ResourceNotFoundException;
 import org.example.springbootlab.mapper.MovieMapper;
 import org.slf4j.Logger;
@@ -32,13 +33,21 @@ public class MovieService {
     public MovieDTO createMovie(CreateMovieDTO createDto) {
         log.info("MovieService createMovie");
         Movie movie = movieMapper.toEntity(createDto);
+
+        boolean exists = movieRepository.findAll().stream()
+                .anyMatch(m -> m.getTitle().equalsIgnoreCase(movie.getTitle()));
+
+        if (exists) {
+            throw new MovieAlreadyExistsException("The PuduMovie " + movie.getTitle() + " already exists");
+        }
+
         Movie newMovie = movieRepository.save(movie);
         return movieMapper.toDto(newMovie);
     }
 
     public MovieDTO updateMovie(Long id, UpdateMovieDTO updateDto) {
         log.info("MovieService updateMovie");
-        Movie movie = movieRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Movie not found"));
+        Movie movie = movieRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("PuduMovie not found"));
         movieMapper.updateEntityFromDto(updateDto, movie);
         Movie updatedMovie = movieRepository.save(movie);
         return movieMapper.toDto(updatedMovie);
@@ -48,7 +57,7 @@ public class MovieService {
         log.info("MovieService deleteMovie: {}", id);
 
         if (!movieRepository.existsById(id))
-            throw new ResourceNotFoundException("Movie not found with id: " + id);
+            throw new ResourceNotFoundException("PuduMovie not found with id: " + id);
 
         movieRepository.deleteById(id);
     }
@@ -66,20 +75,39 @@ public class MovieService {
 
         return movieRepository.findById(id)
                 .map(movieMapper::toDto)
-                .orElseThrow( () -> new ResourceNotFoundException("Movie not found with id: " + id));
+                .orElseThrow( () -> new ResourceNotFoundException("PuduMovie not found with id: " + id));
+    }
+
+    public MovieDTO getMovieByTitle(String title) {
+        return movieRepository.findByTitle(title)
+                .map(movieMapper::toDto)
+                .orElseThrow( () -> new ResourceNotFoundException("PuduMovie not found with title: " + title));
+
     }
 
     public List<MovieDTO> getMovieByDirector(String director) {
 
-        return movieRepository.findMovieByDirector(director).stream()
+        var movie = movieRepository.findMovieByDirector(director).stream()
                 .map(movieMapper::toDto)
                 .toList();
+
+        if (movie.isEmpty()) {
+            throw new ResourceNotFoundException("PuduMovie not found with director: " + director);
+        }
+
+        return movie;
     }
 
     public List<MovieDTO> getMovieByYear(String year) {
 
-        return movieRepository.findMovieByYear(year).stream()
+        var movie = movieRepository.findMovieByYear(year).stream()
                 .map(movieMapper::toDto)
                 .toList();
+
+        if (movie.isEmpty()) {
+            throw new ResourceNotFoundException("PuduMovie not found with year: " + year);
+        }
+
+        return movie;
     }
 }
