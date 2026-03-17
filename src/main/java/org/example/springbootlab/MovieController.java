@@ -1,6 +1,8 @@
 package org.example.springbootlab;
 
 import jakarta.validation.Valid;
+import org.example.springbootlab.exception.MovieAlreadyExistsException;
+import org.example.springbootlab.exception.ResourceNotFoundException;
 import org.example.springbootlab.form.MovieForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +44,16 @@ public class MovieController {
     @GetMapping("/{id}")
     public String getMovieById(Model model, @PathVariable Long id) {
         log.info("Get movie with id {}", id);
-        model.addAttribute("movie", movieService.getMovieById(id));
+        model.addAttribute("movies", movieService.getMovieById(id));
         return "movie-details";
+    }
+
+    //Show a movie by a title
+    @GetMapping("/title/{title}")
+    public String getMovieByTitle(Model model, @PathVariable String title) {
+        log.info("Get movie by title {}", title);
+        model.addAttribute("movies", movieService.getMovieByTitle(title));
+        return "movie-list";
     }
 
     //Show a list of movies with a certain director
@@ -62,18 +72,51 @@ public class MovieController {
         return "movie-list";
     }
 
+    @GetMapping("/search")
+    public String search(
+            @RequestParam String query,
+            @RequestParam String searchType,
+            Model model){
+
+        try {
+            if (query == null || query.isEmpty()) {
+                return "redirect:/";
+            }
+
+            switch (searchType) {
+                case "title" -> {
+                    movieService.getMovieByTitle(query);
+                    return "redirect:/movies/title/" + query;
+                }
+                case "director" -> {
+                    movieService.getMovieByDirector(query);
+                    return "redirect:/movies/director/" + query;
+                }
+                case "year" -> {
+                    movieService.getMovieByYear(query);
+                    return "redirect:/movies/year/" + query;
+                }
+            }
+        } catch (ResourceNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "home";
+        }
+        return "home";
+    }
+
+
     //Show formulary for a new movie
     @GetMapping("/new")
     public String showCreateForm(Model model){
         log.info("Showing form to create a new movie");
         model.addAttribute("movieForm", new MovieForm(
-                "", "", "", 0, ""));
+                "", "", "", "", ""));
         return "form";
     }
 
     @GetMapping("/form")
     public String showForm(Model model) {
-        model.addAttribute("movieForm", new MovieForm("", "", "", 0, ""));
+        model.addAttribute("movieForm", new MovieForm("", "", "", "", ""));
         return "form";
     }
 
@@ -90,12 +133,21 @@ public class MovieController {
         if(bindingResult.hasErrors()){
             log.error("Binding error ocurred");
             model.addAttribute("movieForm", movieForm);
-            model.addAttribute("title", "Please enter a title of a movie");
+            model.addAttribute("nameError", "Please enter a title of a PuduMovie");
+            model.addAttribute("errors", bindingResult);
             return "form";
         }
 
-        movieService.createMovie(movieForm.toDTO());
-        redirectAttributes.addFlashAttribute("message", "Movie created successfully" );
+        try {
+            movieService.createMovie(movieForm.toDTO());
+        } catch (MovieAlreadyExistsException e){
+            bindingResult.rejectValue("title", "error.movie.title", "PuduMovie already exists");
+            model.addAttribute("movieForm", movieForm);
+            model.addAttribute("errors", bindingResult);
+            return "form";
+        }
+
+        redirectAttributes.addFlashAttribute("message", "PuduMovie created successfully" );
 
         return "redirect:/movies/list";
     }
@@ -130,7 +182,7 @@ public class MovieController {
         }
 
         movieService.updateMovie(id, movieForm.toUpdateDTO());
-        redirectAttributes.addFlashAttribute("message", "Movie updated successfully" );
+        redirectAttributes.addFlashAttribute("message", "PuduMovie updated successfully" );
 
         return "redirect:/movies/list";
     }
@@ -144,7 +196,7 @@ public class MovieController {
         log.info("Delete movie {}", id);
 
         movieService.deleteMovie(id);
-        redirectAttributes.addFlashAttribute("message", "Movie deleted successfully" );
+        redirectAttributes.addFlashAttribute("message", "PuduMovie deleted successfully" );
 
         return "redirect:/movies/list";
     }
