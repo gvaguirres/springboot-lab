@@ -9,12 +9,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @NotNull
-@Size(min=2, max=200)
+@Size(min=2, max=200, message = "Please enter a title of a movie")
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
 public @interface Title {
 
-    String message() default "{A valid movie must be not empty and have size 2 to 200}";
+    String message() default "Please enter a title of a movie";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

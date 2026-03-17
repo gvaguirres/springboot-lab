@@ -4,5 +4,5 @@ public record UpdateMovieDTO(
         String title,
         String director,
         String year,
-        int durationMinutes,
+        String durationMinutes,
         String description) {}

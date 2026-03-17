@@ -19,7 +19,7 @@ public class Movie {
     private String description;
     private String year;
     private String director;
-    private int durationMinutes;
+    private String durationMinutes;
 
     public Movie(){}
 
@@ -63,11 +63,11 @@ public class Movie {
         this.director = director;
     }
 
-    public int getDurationMinutes() {
+    public String getDurationMinutes() {
         return durationMinutes;
     }
 
-    public void setDurationMinutes(int durationMinutes) {
+    public void setDurationMinutes(String durationMinutes) {
         this.durationMinutes = durationMinutes;
     }
 

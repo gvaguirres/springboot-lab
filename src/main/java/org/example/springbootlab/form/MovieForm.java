@@ -1,15 +1,17 @@
 package org.example.springbootlab.form;
 
+import jakarta.validation.constraints.NotBlank;
 import org.example.springbootlab.dto.CreateMovieDTO;
 import org.example.springbootlab.dto.UpdateMovieDTO;
 
 public record MovieForm(
 
         @Title
+        @NotBlank(message = "Please enter a title of a PuduMovie")
         String title,
         String director,
         String year,
-        int durationMinutes,
+        String durationMinutes,
         String description) {
 
     public CreateMovieDTO toDTO() {

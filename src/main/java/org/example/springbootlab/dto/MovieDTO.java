@@ -17,11 +17,10 @@ public class MovieDTO {
 
     private String year;
 
-    @NotBlank(message = "Director is mandatory")
     @Size(min = 1, max = 50)
     private String director;
 
-    private int durationMinutes;
+    private String durationMinutes;
 
     public Long getId() {
         return id;
@@ -63,11 +62,11 @@ public class MovieDTO {
         this.director = director;
     }
 
-    public int getDurationMinutes() {
+    public String getDurationMinutes() {
         return durationMinutes;
     }
 
-    public void setDurationMinutes(int durationMinutes) {
+    public void setDurationMinutes(String durationMinutes) {
         this.durationMinutes = durationMinutes;
     }
 }
