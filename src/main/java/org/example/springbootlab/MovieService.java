@@ -78,16 +78,22 @@ public class MovieService {
                 .orElseThrow( () -> new ResourceNotFoundException("PuduMovie not found with id: " + id));
     }
 
-    public MovieDTO getMovieByTitle(String title) {
-        return movieRepository.findByTitle(title)
-                .map(movieMapper::toDto)
-                .orElseThrow( () -> new ResourceNotFoundException("PuduMovie not found with title: " + title));
+    public List<MovieDTO> getMovieByTitle(String title) {
 
+        var movie = movieRepository.findByTitleContainingIgnoreCase(title).stream()
+                .map(movieMapper::toDto)
+                .toList();
+
+        if (movie.isEmpty()) {
+            throw new ResourceNotFoundException("PuduMovie not found with title: " + title);
+        }
+
+        return movie;
     }
 
     public List<MovieDTO> getMovieByDirector(String director) {
 
-        var movie = movieRepository.findMovieByDirector(director).stream()
+        var movie = movieRepository.findMovieByDirectorContainingIgnoreCase(director).stream()
                 .map(movieMapper::toDto)
                 .toList();
 
