@@ -1,4 +1,6 @@
 @param org.example.springbootlab.form.MovieForm movieForm
+@param org.springframework.validation.BindingResult errors
+@param String nameError
 
 <!DOCTYPE html>
 <html>
@@ -17,6 +19,9 @@
     <form action="/movies/create" method="POST" style="display: flex; flex-direction: column; align-items: center;">
 
         <input type="text" name="title" class="input" placeholder="Title" value="${movieForm.title()}">
+        @if(errors != null && errors.hasFieldErrors("title"))
+            <div style="color:red">${errors.getFieldError("title").getDefaultMessage()}</div><br>
+        @endif
         <input type="text" name="director" class="input" placeholder="Director" value="${movieForm.director()}">
         <input type="number" name="year" class="input" placeholder="Year" value="${movieForm.year()}">
         <input type="number" name="durationMinutes" class="input" placeholder="Duration (min)" value="${movieForm.durationMinutes()}">
