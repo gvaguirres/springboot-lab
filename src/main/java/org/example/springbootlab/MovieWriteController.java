@@ -32,7 +32,7 @@ public class MovieWriteController {
     public String showCreateForm(Model model){
         log.info("Showing form to create a new movie");
         model.addAttribute(MOVIE_FORM, new MovieForm(
-                "", "", "..", "", ""));
+                "", "", "", "", ""));
         return "form";
     }
 
