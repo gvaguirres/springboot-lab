@@ -1,7 +1,6 @@
 package org.example.springbootlab;
 
 import org.example.springbootlab.dto.MovieDTO;
-import org.example.springbootlab.entity.Movie;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +13,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import org.example.springbootlab.dto.MovieDTO;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.example.springbootlab.MovieReadController.MOVIE_LIST;
 import static org.example.springbootlab.MovieReadController.MOVIE_PAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = MovieReadController.class)
 class MovieReadControllerTest {
