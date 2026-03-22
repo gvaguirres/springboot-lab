@@ -44,7 +44,6 @@ class MovieServiceTest {
     private String year;
     private Movie movieEntity;
     private MovieDTO movieDTO;
-    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
@@ -81,9 +80,7 @@ class MovieServiceTest {
         when(movieMapper.toEntity(createMovieDTO)).thenReturn(movieEntity);
         when(movieRepository.findAll()).thenReturn(List.of(movieEntity));
 
-        MovieAlreadyExistsException exception = assertThrows(MovieAlreadyExistsException.class, () -> {
-                movieService.createMovie(createMovieDTO);
-                });
+        MovieAlreadyExistsException exception = assertThrows(MovieAlreadyExistsException.class, () -> movieService.createMovie(createMovieDTO));
 
         assertEquals("The PuduMovie " + title + " already exists", exception.getMessage());
     }
@@ -119,9 +116,7 @@ class MovieServiceTest {
 
         when(movieRepository.existsById(movieId)).thenReturn(false);
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            movieService.deleteMovie(movieId);
-        });
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> movieService.deleteMovie(movieId));
 
         assertEquals("PuduMovie not found with id: " + movieId, exception.getMessage());
 
@@ -158,9 +153,7 @@ class MovieServiceTest {
     void getMovieByTitle_ShouldReturnResourceNotFoundException_WhenItDoesNotExist() {
         when(movieRepository.findByTitleContainingIgnoreCase(title)).thenReturn(List.of());
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            movieService.getMovieByTitle(title);
-        });
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> movieService.getMovieByTitle(title));
 
         assertEquals("PuduMovie not found with title: " + title, exception.getMessage());
 
@@ -185,9 +178,7 @@ class MovieServiceTest {
 
         when(movieRepository.findMovieByDirectorContainingIgnoreCase(director)).thenReturn(List.of());
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            movieService.getMoviesByDirector(director);
-        });
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> movieService.getMoviesByDirector(director));
 
         assertEquals("PuduMovie not found with director: " + director, exception.getMessage());
 
@@ -212,9 +203,7 @@ class MovieServiceTest {
 
         when(movieRepository.findMovieByYear(year)).thenReturn(List.of());
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            movieService.getMoviesByYear(year);
-        });
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> movieService.getMoviesByYear(year));
 
         assertEquals("PuduMovie not found with year: " + year, exception.getMessage());
 
@@ -222,7 +211,9 @@ class MovieServiceTest {
     }
 
     @Test
-    void getAllBy_ShoudlReturnPageMovieDTO() {
+    void getAllBy_ShouldReturnPageMovieDTO() {
+
+        Pageable pageable;
         pageable = PageRequest.of(0, 10);
         Page<Movie> moviePage = new PageImpl<>(List.of(movieEntity), pageable, 1);
 
@@ -233,7 +224,7 @@ class MovieServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        assertEquals("Titanic", result.getContent().get(0).getTitle());
+        assertEquals("Titanic", result.getContent().getFirst().getTitle());
         verify(movieRepository).findAllBy(pageable);
 
     }
