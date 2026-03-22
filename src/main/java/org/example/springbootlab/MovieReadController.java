@@ -3,7 +3,6 @@ package org.example.springbootlab;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.*;
 import org.example.springbootlab.dto.MovieDTO;
-import org.example.springbootlab.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,8 @@ public class MovieReadController {
     private static final Logger log = LoggerFactory.getLogger(MovieReadController.class);
     private final MovieService movieService;
 
-    private static final String MOVIE_PAGE = "moviePage";
-    private static final String MOVIE_LIST = "movie-list";
+    public static final String MOVIE_PAGE = "moviePage";
+    public static final String MOVIE_LIST = "movie-list";
 
     public MovieReadController(MovieService movieService) {
         log.info("MovieController constructor");
@@ -97,23 +96,18 @@ public class MovieReadController {
     @GetMapping("/search")
     public String search(
             @RequestParam String query,
-            @RequestParam String searchType,
-            Model model){
+            @RequestParam String searchType) {
 
-        try {
-            if (query == null || query.isEmpty()) {
-                return "redirect:/";
-            }
-
-            switch (searchType) {
-                case "title" -> {return "redirect:/movies/title/" + query;}
-                case "director" -> {return "redirect:/movies/director/" + query;}
-                case "year" -> {return "redirect:/movies/year/" + query;}
-                default -> {return "home";}
-            }
-        } catch (ResourceNotFoundException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "home";
+        if (query == null || query.isEmpty()) {
+            return "redirect:/";
         }
+
+        return switch (searchType) {
+            case "title" -> "redirect:/movies/title/" + query;
+            case "director" -> "redirect:/movies/director/" + query;
+            case "year" -> "redirect:/movies/year/" + query;
+            default -> "home";
+
+        };
     }
 }
