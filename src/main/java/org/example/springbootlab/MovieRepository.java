@@ -1,6 +1,8 @@
 package org.example.springbootlab;
 
 import org.example.springbootlab.entity.Movie;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,6 @@ public interface MovieRepository extends ListCrudRepository<Movie, Long> {
 
     @Query("SELECT y FROM Movie y WHERE y.year = :year")
     List<Movie> findMovieByYear(@Param("year") String year);
+
+    Page<Movie> findAllBy(Pageable pageable);
 }

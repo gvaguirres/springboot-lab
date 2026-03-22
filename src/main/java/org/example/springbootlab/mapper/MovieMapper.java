@@ -20,5 +20,4 @@ public interface MovieMapper {
     //Update an existent Entity
     @Mapping(target = "id", ignore = true)
     void updateEntityFromDto(UpdateMovieDTO updateDto, @MappingTarget Movie movie );
-
 }
