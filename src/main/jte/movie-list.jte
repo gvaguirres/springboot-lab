@@ -1,4 +1,4 @@
-@param java.util.List<org.example.springbootlab.dto.MovieDTO> movies
+@param org.springframework.data.domain.Page<org.example.springbootlab.dto.MovieDTO> moviePage
 @param String message
 
 
@@ -39,7 +39,7 @@
     </tr>
     </thead>
     <tbody>
-    @for(var movie : movies)
+    @for(var movie : moviePage.getContent())
         <tr style="border-bottom: 1px solid #ddd;">
             <td>${movie.getTitle()}</td>
             <td>${movie.getDirector()}</td>
@@ -49,7 +49,7 @@
 
             <td class="actions-column">
                 <a href="/movies/update/${movie.getId()}"
-                    style="color: blue; text-decoration: none; font-size: 14px;">
+                   style="color: blue; text-decoration: none; font-size: 14px;">
                     Update </a>
                 <span style="margin: 0 5px;">|</span>
 
@@ -64,6 +64,18 @@
     @endfor
     </tbody>
 </table>
+
+<div class="pagination">
+    @if(moviePage.hasPrevious())
+        <a class="btn-page" href="/movies/list?page=${moviePage.getNumber() - 1}">« Back</a>
+    @endif
+
+    <span>Page <strong>${moviePage.getNumber() + 1}</strong> of <strong>${moviePage.getTotalPages()}</strong></span>
+
+    @if(moviePage.hasNext())
+        <a class="btn-page" href="/movies/list?page=${moviePage.getNumber() + 1}">Next »</a>
+    @endif
+</div>
 
 <div style="margin-top: 50px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
 
