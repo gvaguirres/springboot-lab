@@ -9,12 +9,13 @@ import org.example.springbootlab.exception.ResourceNotFoundException;
 import org.example.springbootlab.mapper.MovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -91,7 +92,7 @@ public class MovieService {
         return movie;
     }
 
-    public List<MovieDTO> getMovieByDirector(String director) {
+    public List<MovieDTO> getMoviesByDirector(String director) {
 
         var movie = movieRepository.findMovieByDirectorContainingIgnoreCase(director).stream()
                 .map(movieMapper::toDto)
@@ -104,7 +105,7 @@ public class MovieService {
         return movie;
     }
 
-    public List<MovieDTO> getMovieByYear(String year) {
+    public List<MovieDTO> getMoviesByYear(String year) {
 
         var movie = movieRepository.findMovieByYear(year).stream()
                 .map(movieMapper::toDto)
@@ -115,5 +116,10 @@ public class MovieService {
         }
 
         return movie;
+    }
+
+    public Page<MovieDTO> getAllBy(Pageable pageable) {
+        return movieRepository.findAllBy(pageable)
+                .map(movieMapper::toDto);
     }
 }
