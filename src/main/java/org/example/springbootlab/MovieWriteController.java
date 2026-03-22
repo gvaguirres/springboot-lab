@@ -20,7 +20,7 @@ public class MovieWriteController {
 
     private static final String MESSAGE = "message";
     private static final String REDIRECT_MOVIES_LIST = "redirect:/movies/list";
-    private static final String MOVIE_FORM = "movieForm";
+    public static final String MOVIE_FORM = "movieForm";
 
     public MovieWriteController(MovieService movieService) {
         log.info("MovieController constructor");
