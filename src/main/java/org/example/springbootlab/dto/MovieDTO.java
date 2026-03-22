@@ -24,7 +24,7 @@ public class MovieDTO {
 
     public MovieDTO() {}
 
-    public MovieDTO(Long id, String title, String description, String year, String director, String durationMinutes) {
+    public MovieDTO(Long id, String title, String director, String year, String durationMinutes, String description) {
         this.id = id;
         this.title = title;
         this.description = description;

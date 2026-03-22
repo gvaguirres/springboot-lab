@@ -52,8 +52,8 @@ class MovieServiceTest {
         title = "Titanic";
         year = "1998";
 
-        movieEntity = new Movie(movieId, title, "Description", year, director, "195");
-        movieDTO = new MovieDTO(movieId, title, "Description", year, director, "195");
+        movieEntity = new Movie(movieId, title, director, year, "195", "Description");
+        movieDTO = new MovieDTO(movieId, title, director, year, "195", "Description");
     }
 
     @Test

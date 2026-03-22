@@ -23,7 +23,7 @@ public class Movie {
 
     public Movie(){}
 
-    public Movie(Long id, String title, String description, String year, String director, String durationMinutes) {
+    public Movie(Long id, String title, String director, String year, String durationMinutes, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
