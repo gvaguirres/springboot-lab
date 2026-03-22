@@ -22,6 +22,17 @@ public class MovieDTO {
 
     private String durationMinutes;
 
+    public MovieDTO() {}
+
+    public MovieDTO(Long id, String title, String description, String year, String director, String durationMinutes) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.year = year;
+        this.director = director;
+        this.durationMinutes = durationMinutes;
+    }
+
     public Long getId() {
         return id;
     }
