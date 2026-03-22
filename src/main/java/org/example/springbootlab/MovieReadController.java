@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
@@ -102,10 +104,12 @@ public class MovieReadController {
             return "redirect:/";
         }
 
+        String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+
         return switch (searchType) {
-            case "title" -> "redirect:/movies/title/" + query;
-            case "director" -> "redirect:/movies/director/" + query;
-            case "year" -> "redirect:/movies/year/" + query;
+            case "title" -> "redirect:/movies/title/" + encodedQuery;
+            case "director" -> "redirect:/movies/director/" + encodedQuery;
+            case "year" -> "redirect:/movies/year/" + encodedQuery;
             default -> "home";
 
         };

@@ -11,11 +11,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = MovieWriteController.class)
 class MovieWriteControllerTest {
@@ -146,7 +146,7 @@ class MovieWriteControllerTest {
     }
 
     @Test
-    void updateMovie_shouldReturnForm_WhenMovieAlreadyExists() throws Exception {
+    void updateMovie_ShouldReturnForm_WhenValidationFails() throws Exception {
 
         Long id = 1L;
 
@@ -156,7 +156,7 @@ class MovieWriteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("movie-edit-form"));
 
-        verifyNoInteractions(movieService);
+        verify(movieService, never()).updateMovie(any(), any());
     }
 
     @Test

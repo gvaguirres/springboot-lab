@@ -129,7 +129,7 @@ class MovieReadControllerTest {
                 .param("query", "James Cameron")
                 .param("searchType", "director"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movies/director/James Cameron"));
+                .andExpect(redirectedUrl("/movies/director/James+Cameron"));
     }
 
     @Test

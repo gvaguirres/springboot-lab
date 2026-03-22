@@ -32,7 +32,7 @@ public class MovieWriteController {
     public String showCreateForm(Model model){
         log.info("Showing form to create a new movie");
         model.addAttribute(MOVIE_FORM, new MovieForm(
-                "", "", "", "", ""));
+                "", "", "..", "", ""));
         return "form";
     }
 
@@ -94,12 +94,17 @@ public class MovieWriteController {
             @PathVariable Long id,
             @Valid @ModelAttribute("movieForm") MovieForm movieForm,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
         log.info("Update movie {}", movieForm);
 
         if(bindingResult.hasErrors()){
             log.error("Binding error ocurred");
+            model.addAttribute("id", id);
+            var movie = movieService.getMovieById(id);
+            model.addAttribute("movie", movie);
+
             return "movie-edit-form";
         }
 

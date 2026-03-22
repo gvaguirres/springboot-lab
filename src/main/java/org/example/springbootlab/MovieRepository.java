@@ -14,11 +14,18 @@ public interface MovieRepository extends ListCrudRepository<Movie, Long> {
     @Query("SELECT t FROM Movie t WHERE LOWER(REPLACE(t.title, ' ', '')) LIKE LOWER(CONCAT('%', REPLACE(:title, ' ', ''), '%'))")
     List<Movie> findByTitleContainingIgnoreCase(@Param("title") String title);
 
-    @Query("SELECT m FROM Movie m WHERE m.director like %:director%")
+    @Query("""
+            SELECT m
+            FROM Movie m
+            WHERE LOWER(m.director)
+            LIKE LOWER(CONCAT('%', :director, '%'))
+           """)
     List<Movie> findMovieByDirectorContainingIgnoreCase(@Param("director") String director);
 
     @Query("SELECT y FROM Movie y WHERE y.year = :year")
     List<Movie> findMovieByYear(@Param("year") String year);
 
     Page<Movie> findAllBy(Pageable pageable);
+
+    boolean existsByTitleIgnoreCase(String title);
 }

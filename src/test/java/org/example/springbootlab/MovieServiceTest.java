@@ -78,7 +78,7 @@ class MovieServiceTest {
         CreateMovieDTO createMovieDTO = new CreateMovieDTO(title, "Description", year, director, "195");
 
         when(movieMapper.toEntity(createMovieDTO)).thenReturn(movieEntity);
-        when(movieRepository.findAll()).thenReturn(List.of(movieEntity));
+        when(movieRepository.existsByTitleIgnoreCase(title)).thenReturn(true);
 
         MovieAlreadyExistsException exception = assertThrows(MovieAlreadyExistsException.class, () -> movieService.createMovie(createMovieDTO));
 

@@ -35,8 +35,7 @@ public class MovieService {
         log.info("MovieService createMovie");
         Movie movie = movieMapper.toEntity(createDto);
 
-        boolean exists = movieRepository.findAll().stream()
-                .anyMatch(m -> m.getTitle().equalsIgnoreCase(movie.getTitle()));
+        boolean exists = movieRepository.existsByTitleIgnoreCase(movie.getTitle());
 
         if (exists) {
             throw new MovieAlreadyExistsException("The PuduMovie " + movie.getTitle() + " already exists");
