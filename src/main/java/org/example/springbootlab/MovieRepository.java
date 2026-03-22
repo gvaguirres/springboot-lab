@@ -28,4 +28,6 @@ public interface MovieRepository extends ListCrudRepository<Movie, Long> {
     Page<Movie> findAllBy(Pageable pageable);
 
     boolean existsByTitleIgnoreCase(String title);
+
+    boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id);
 }

@@ -48,6 +48,12 @@ public class MovieService {
     public MovieDTO updateMovie(Long id, UpdateMovieDTO updateDto) {
         log.info("MovieService updateMovie");
         Movie movie = movieRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("PuduMovie not found"));
+
+        boolean existsWithSameTitle = movieRepository.existsByTitleIgnoreCaseAndIdNot(updateDto.title(), id);
+        if (existsWithSameTitle) {
+            throw new MovieAlreadyExistsException("The PuduMovie " + updateDto.title() + " already exists");
+        }
+
         movieMapper.updateEntityFromDto(updateDto, movie);
         Movie updatedMovie = movieRepository.save(movie);
         return movieMapper.toDto(updatedMovie);
